@@ -73,9 +73,48 @@ const MAINNET_SWAP: ChainSwapConfig = {
   tokens: MAINNET_TOKENS,
 };
 
+// https://docs.uniswap.org/contracts/v4/deployments  (Sepolia, 11155111)
+const SEPOLIA_UNIVERSAL_ROUTER = "0x3A9D48AB9751398BbFa63ad67599Bb04e4BdF98b";
+const SEPOLIA_V4_QUOTER = "0x61b3f2011a92d183c7dbadbda940a7555ccf9227";
+
+// Circle native USDC on Ethereum Sepolia. Official Tether USDT is not deployed there.
+// JPYC testnet uses the same address as mainnet (JPYC developer docs).
+const SEPOLIA_TOKENS: SwapToken[] = [
+  {
+    symbol: "USDC",
+    address: "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238",
+    decimals: 6,
+    poolFee: 500,
+    tickSpacing: 10,
+    hooks: ZERO,
+  },
+  {
+    symbol: "JPYC",
+    address: "0xE7C3D8C9a439feDe00D2600032D5dB0Be71C3c29",
+    decimals: 18,
+    poolFee: 3000,
+    tickSpacing: 60,
+    hooks: ZERO,
+  },
+];
+
+const SEPOLIA_SWAP: ChainSwapConfig = {
+  universalRouter: SEPOLIA_UNIVERSAL_ROUTER,
+  permit2: MAINNET_PERMIT2,
+  quoter: SEPOLIA_V4_QUOTER,
+  tokens: SEPOLIA_TOKENS,
+};
+
+export const SUPPORTED_APP_CHAIN_IDS = [1, 31337, 11155111] as const;
+
+export function isSupportedAppChain(chainId: number | null): boolean {
+  return chainId != null && (SUPPORTED_APP_CHAIN_IDS as readonly number[]).includes(chainId);
+}
+
 export const SWAP_CONFIG: Record<number, ChainSwapConfig> = {
   1: MAINNET_SWAP,
   31337: MAINNET_SWAP,
+  11155111: SEPOLIA_SWAP,
 };
 
 export function getSwapConfig(chainId: number | null): ChainSwapConfig | null {

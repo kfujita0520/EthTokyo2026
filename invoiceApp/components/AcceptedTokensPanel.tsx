@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getAddress, ZeroAddress } from "ethers";
 import { useWallet } from "@/lib/wallet";
 import { formatContractError, getWriteContract, getReadOnlyContract } from "@/lib/contract";
+import { isSupportedAppChain } from "@/lib/swap/config";
 
 export function AcceptedTokensPanel({ onChanged }: { onChanged?: () => void }) {
   const { signer, address, chainId } = useWallet();
@@ -47,13 +48,15 @@ export function AcceptedTokensPanel({ onChanged }: { onChanged?: () => void }) {
         setError("Native ETH is not on this list — create ETH invoices with the checkbox above.");
         return;
       }
-      if (chainId != null && chainId !== 31337 && chainId !== 1) {
-        setError(`Wallet is on chain ${chainId}. Switch MetaMask to Localhost 31337.`);
+      if (!isSupportedAppChain(chainId)) {
+        setError(
+          `Wallet is on chain ${chainId}. Switch MetaMask to Localhost 31337, Ethereum, or Sepolia.`
+        );
         return;
       }
       if (!isMerchant) {
         setError(
-          `Only the merchant can accept tokens. Connected ${address.slice(0, 6)}… — switch to ${merchant ? `${merchant.slice(0, 6)}…${merchant.slice(-4)}` : "Anvil account 0"}.`
+          `Only the merchant can accept tokens. Connected ${address.slice(0, 6)}… — switch to ${merchant ? `${merchant.slice(0, 6)}…${merchant.slice(-4)}` : "the merchant wallet"}.`
         );
         return;
       }
@@ -83,7 +86,7 @@ export function AcceptedTokensPanel({ onChanged }: { onChanged?: () => void }) {
       </p>
       {!isMerchant && address && (
         <p className="text-xs text-amber-400">
-          Connect the merchant wallet (Anvil account 0) to Accept or Revoke.
+          Connect the contract merchant wallet to Accept or Revoke.
         </p>
       )}
       <div className="flex gap-2">

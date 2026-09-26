@@ -30,7 +30,7 @@ export async function fetchInvoice(id: bigint): Promise<InvoiceView> {
 }
 
 /**
- * Block where InvoiceContract was deployed on the current Anvil mainnet fork.
+ * Block where InvoiceContract was deployed on the configured chain.
  * Alchemy's free tier rejects eth_getLogs ranges wider than 10 blocks, so scanning
  * from genesis ("earliest") fails. Override with NEXT_PUBLIC_FROM_BLOCK after a new deploy.
  */

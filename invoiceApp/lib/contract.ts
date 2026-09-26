@@ -32,7 +32,7 @@ export function getWriteContract(signer: Signer): Contract {
 }
 
 const ERROR_COPY: Record<string, string> = {
-  NotAuthorized: "Only the contract merchant can do this. Switch MetaMask to Anvil account 0 (0xf39F…2266).",
+  NotAuthorized: "Only the contract merchant can do this. Switch MetaMask to the merchant wallet.",
   UnsupportedToken: "Native ETH cannot be added to this list.",
   TokenNotAccepted: "This token is not on the accepted-token list.",
   InvalidAmount: "Amount must be greater than zero.",
@@ -72,7 +72,7 @@ export function formatContractError(err: unknown, contract?: Contract): string {
     if (decoded) return decoded;
   }
   if (message.includes("unknown custom error") || message.includes("execution reverted")) {
-    return `${message} — createInvoice / setAcceptedToken are merchant-only. Switch MetaMask to Anvil account 0 (0xf39F…2266) on Localhost 31337.`;
+    return `${message} — createInvoice / setAcceptedToken are merchant-only. Switch MetaMask to the merchant wallet on the same chain as NEXT_PUBLIC_RPC_URL.`;
   }
   return message;
 }
