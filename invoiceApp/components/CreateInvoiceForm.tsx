@@ -73,7 +73,7 @@ export function CreateInvoiceForm({
     }
     if (!isMerchant) {
       setError(
-        `Only the merchant can create invoices. Connected ${address?.slice(0, 6)}… — switch to ${merchant ? `${merchant.slice(0, 6)}…${merchant.slice(-4)}` : "Anvil account 0"}.`
+        `Only the merchant can create invoices. Connected ${address?.slice(0, 6)}… — switch to ${merchant ? `${merchant.slice(0, 6)}…${merchant.slice(-4)}` : "the merchant wallet"}.`
       );
       return;
     }
@@ -115,7 +115,7 @@ export function CreateInvoiceForm({
       <h2 className="text-lg font-medium text-white">Create invoice</h2>
       {!isMerchant && address && (
         <p className="text-xs text-amber-400">
-          Connect the merchant wallet (Anvil account 0) to create invoices.
+          Connect the contract merchant wallet to create invoices.
         </p>
       )}
 

@@ -46,6 +46,21 @@ npm install
 npm run dev
 ```
 
+## Sepolia
+
+The same app works on Sepolia (11155111). Point `.env` at a Sepolia RPC, the
+deployed `InvoiceContract`, and that deploy's block as `FROM_BLOCK`. Also set
+server-only `MULTIBAAS_BASE_URL` and `MULTIBAAS_API_KEY` (alias
+`invoicecontract1`). On Sepolia, invoice and accepted-token lists come from
+MultiBaas; other chains still replay logs. Restart `npm run dev`. MetaMask
+must be on Sepolia.
+
+`lib/swap/config.ts` already has Sepolia Universal Router, Permit2, Quoter, and
+test tokens (Circle Sepolia USDC; JPYC testnet). There is no official Tether
+USDT on Sepolia. `poolFee` / `tickSpacing` must match a pool that exists on
+Sepolia v4 or the quote will revert. Accept tokens on-chain after deploy —
+the Sepolia script does not seed them.
+
 ## Roles
 
 | Anvil account | Role | Can |
@@ -70,7 +85,7 @@ ETH invoices use `token = address(0)`.
 
 **`lib/swap/config.ts`** is Uniswap **route metadata**, not the allow-list:
 
-- Universal Router / Permit2 / Quoter addresses (mainnet; reused on 31337)
+- Universal Router / Permit2 / Quoter addresses (mainnet reused on 31337; Sepolia is separate)
 - Per-token `poolFee` / `tickSpacing` / `hooks` so the client can build a
   single-hop `SWAP_EXACT_OUT_SINGLE`
 
@@ -105,7 +120,7 @@ banner; the page Status updates to Paid without a refresh.
   invoice navigation does not drop the connection. Empty `accountsChanged` is
   debounced so MetaMask flickers do not clear storage.
 - Invoice lists replay `InvoiceCreated` from `NEXT_PUBLIC_FROM_BLOCK`. Wide
-  `getLogs` against some hosted RPCs fails. Keep the app on Anvil.
+  `getLogs` against some hosted RPCs fails. Keep `FROM_BLOCK` near the deploy block.
   Enumerating `nextInvoiceId` would be more robust and is not implemented.
 - Custom errors (`NotAuthorized`, `TokenNotAccepted`, …) are decoded in
   `formatContractError`. ethers often shows them as `unknown custom error`
