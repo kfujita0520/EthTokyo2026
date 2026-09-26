@@ -49,8 +49,11 @@ npm run dev
 ## Sepolia
 
 The same app works on Sepolia (11155111). Point `.env` at a Sepolia RPC, the
-deployed `InvoiceContract`, and that deploy's block as `FROM_BLOCK`. Restart
-`npm run dev`. MetaMask must be on Sepolia.
+deployed `InvoiceContract`, and that deploy's block as `FROM_BLOCK`. Also set
+server-only `MULTIBAAS_BASE_URL` and `MULTIBAAS_API_KEY` (alias
+`invoicecontract1`). On Sepolia, invoice and accepted-token lists come from
+MultiBaas; other chains still replay logs. Restart `npm run dev`. MetaMask
+must be on Sepolia.
 
 `lib/swap/config.ts` already has Sepolia Universal Router, Permit2, Quoter, and
 test tokens (Circle Sepolia USDC; JPYC testnet). There is no official Tether
